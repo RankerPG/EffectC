@@ -1,63 +1,187 @@
 ﻿#include <iostream>
+#include <chrono>
+#include <numeric>
 
 using namespace std;
 
 
 ///////////////////////////////////////////////////////////////////////////////////////////////////////////////
-class TextBlock
+//
+
+class CUnCopy
 {
 public:
-	TextBlock()
-		: m_len(10)
-		, m_vaild(false)
+	CUnCopy() = default;
+	~CUnCopy() = default;
+
+	CUnCopy(const CUnCopy& rhs) = delete;
+	CUnCopy& operator= (const CUnCopy& rhs) = delete;
+};
+
+class CTransaction
+{
+public:
+	CTransaction()
 	{
-		m_str = new char[10];
-		strcpy(m_str, "String!!");
+		Init();
 	}
 
-	~TextBlock()
+	~CTransaction() = default;
+
+protected:
+	virtual void LogTransaction() = 0;
+
+	void Init()
 	{
-		delete m_str;
-		m_str = nullptr;
+		LogTransaction();
 	}
-	
-	char& operator[](int position) const { return m_str[position]; }
-	
-	char* Get_String() const { return m_str; }
-	char* Get_String() { return m_str; }
+};
 
-	const int& Get_length() const
+class CBuyTransaction : public CTransaction
+{
+public:
+	CBuyTransaction()
+		: CTransaction()
 	{
-		if (false == m_vaild)
-		{
-			m_len = strlen(m_str);
-			m_vaild = true;
-		}
-
-		return m_len;
+		LogTransaction();
 	}
 
-	int& Get_length()
+	~CBuyTransaction() = default;
+
+protected:
+	virtual void LogTransaction()
 	{
-		return const_cast<int&>(static_cast<const TextBlock&>(*this).Get_length());
+		cout << "BuyTrasaction !" << endl;
+	}
+};
+
+class CConvertion
+{
+public:
+	CConvertion()
+		: m_iNum(0) {}
+
+	CConvertion& operator= (CConvertion rhs)
+	{
+		swap(rhs);
+		return *this;
+
+		//if (this == &rhs)
+		//	return *this;
+
+		//m_iNum = rhs.m_iNum;
+		//return *this;
+	}
+
+	CConvertion& operator+= (const CConvertion& rhs)
+	{
+		m_iNum += rhs.m_iNum;
+		return *this;
+	}
+
+	CConvertion& operator= (const int rhs)
+	{
+		m_iNum = rhs;
+		return *this;
+	}
+
+public:
+	const int& Get_Num()
+	{
+		return m_iNum;
+	}
+
+	void swap(CConvertion& rhs)
+	{
+		m_iNum = rhs.m_iNum;
 	}
 
 private:
-	char*			m_str;
-	string			m_string;
-	mutable int		m_len;
-	mutable bool	m_vaild;
+	int m_iNum;
 };
-
 
 int main()
 {
-	const TextBlock tb;
+	//CUnCopy origin;
 
-	char* p = &tb[0];
+	//CUnCopy cpy(origin);
+
+	//CBuyTransaction cb;
+
+	CConvertion c1, c2, c3;
+
+	auto start = chrono::high_resolution_clock::now();
+
+	for(int i = 0; i < 1000000; ++i)
+		c1 = c2 = c3 = 10;
+
+	auto end = chrono::high_resolution_clock::now();
+
+	chrono::duration<double> diff = end - start;
+
+	cout << diff.count() << endl;
+
+	//cout << c1.Get_Num() << c2.Get_Num() << c3.Get_Num() << endl;
 
 	return 0;
 }
+
+///////////////////////////////////////////////////////////////////////////////////////////////////////////////
+// const 관련 내용
+//class TextBlock
+//{
+//public:
+//	TextBlock()
+//		: m_len(10)
+//		, m_vaild(false)
+//	{
+//		m_str = new char[10];
+//		strcpy(m_str, "String!!");
+//	}
+//
+//	~TextBlock()
+//	{
+//		delete m_str;
+//		m_str = nullptr;
+//	}
+//	
+//	char& operator[](int position) const { return m_str[position]; }
+//	
+//	char* Get_String() const { return m_str; }
+//	char* Get_String() { return m_str; }
+//
+//	const int& Get_length() const
+//	{
+//		if (false == m_vaild)
+//		{
+//			m_len = strlen(m_str);
+//			m_vaild = true;
+//		}
+//
+//		return m_len;
+//	}
+//
+//	int& Get_length()
+//	{
+//		return const_cast<int&>(static_cast<const TextBlock&>(*this).Get_length());
+//	}
+//
+//private:
+//	char*			m_str;
+//	string			m_string;
+//	mutable int		m_len;
+//	mutable bool	m_vaild;
+//};
+//
+//
+//int main()
+//{
+//	const TextBlock tb;
+//
+//	char* p = &tb[0];
+//
+//	return 0;
+//}
 
 ///////////////////////////////////////////////////////////////////////////////////////////////////////////////
 // 필기 테스트 복기
