@@ -117,3 +117,104 @@ class child
 - 복사 함수들이 겹치는 부분이 많다고 한쪽을 이용해 다른 쪽을 구현하는 시도는 좋지 않고 불가능하다.
 가능하더라도 하면 안된다.
 
+# 2019.11.07
+<code> ~ page 135 </code>
+
+## Chapter 3 - 자원 관리
+
+### Item 13 : 자원 관리에는 객체가 그만!
+*****
+
+- 스마트 포인터인 auto_ptr와 같은 객체를 활용하여 자원 관리하자
+
+- RAII ( Resource Acquisition is Initialization ) : 자원 획득 즉시 초기화
+
+- RCSP ( Reference-Counting smart pointer) : 참조 카운팅 방식 스마트 포인터<br>
+shared_ptr이 RCSP 클래스이며, 서로 참조하는 경우는 해결하지 못함
+
+<pre>
+**찾아 보기**
+1. boost에 있는 scoped_array와 shared_array로 동적 배열도 자원 관리할 수 있다고 한다.
+이미 표준화되있을 수 있으니 찾아보기
+2. shared_ptr의 서로 참조하는 경우의 해결책 찾아보기
+</pre>
+
+### Item 14 : 자원 관리 클래스의 복사 동작에 대해 진지하게 고찰하자
+*****
+
+```cpp
+class CBase
+{
+public:
+	CBase() = default;
+	~CBase() = default;
+
+public:
+	int		m_iNum;
+};
+
+class CDerived : private CBase
+{
+public:
+	CDerived()
+	{
+		m_iNum = 10;
+	}
+};
+
+class CDerived2 : public CDerived
+{
+public:
+	CDerived2()
+	{
+      // private 멤버라 접근 불가하여 에러
+		//m_iNum = 10;
+	}
+};
+```
+
+- CBase를 CDerived로 private으로 상속하면 CBase의 private 멤버는 접근 불가하고<br>
+다른 멤버들은 Derived에서 private 멤버로 바뀐다. <br>
+Derived를 Derived로 public으로 상속하면 CBase의 m_iNum에 Derived2는 접근하지 못한다.
+
+- shared_ptr은 2번째 매개변수로 삭제자(Deleter)를 받아 카운트가 0이 되어 소멸할 때 호출할 함수를
+받을 수 있다.
+
+- RAII 객체를 복사할 때
+1. 복사를 금지한다.
+2. **관리하고 있는 자원에 대해 참조 카운팅을 수행한다. (shared_ptr & deleter 설정)**
+3. 관리하고 있는 자원을 진짜로 복사
+4. 관리하고 있는 자원의 소유권을 옮김
+
+### Item 15 : 자원 관리 클래스에서 관리되는 자원은 외부에서 접근할 수 있도록 하자
+*****
+
+```cpp
+// 명시적 변환
+Resource get() const { return resource; }
+
+// 암시적 변환
+Resource operator Resource() const { return resource; }
+```
+
+- 자원 관리 객체가 관리하는 자원이 필요한 경우 자원 관리 객체는 자원을 얻을 수 있는 방법을 제공해야 된다.
+shared_ptr과 같은 경우 명시적 변환을 통한 get() 함수를 제공하지만 암시적 변환도 가능하다.
+안정적인 명시적 변환이 더 좋아보임
+
+### Item 16 : new 및 delete를 사용할 때는 형태를 반드시 맞추자
+*****
+
+- 동적할당 시 메모리 구조
+
+|단일 객체|배열 객체|
+|--------|----------------|
+|object | n object object|
+
+- 객체가 1개인지 배열인지에 따라 구성되는 메모리 구조가 다르기 때문에 해제할 때 []로 구분해야된다.
+
+### Item 17 : new로 생성한 객체를 스마트 포인터에 저장하는 코드는 별도의 한 문장으로 만들자
+*****
+
+
+
+
