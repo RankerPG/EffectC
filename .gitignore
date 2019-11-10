@@ -1,9 +1,5 @@
 ### C++ ###
 
-*.vcxproj
-*.filters
-*.user
-
 .vs/
 .EffectC/vs/
 .EffectC/Debug/
