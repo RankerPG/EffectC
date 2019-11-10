@@ -283,12 +283,103 @@ priority(pWidget, iPriority);
 1. 복사 손실 문제(Slicing problem)를 막아준다.
 2. '값의 의한 전달'은 복사 생성자 호출로 인해 무겁다. ( 부모 생성자 호출, 멤버 변수 생성자 호출 )
 
+# 2019.11.10
+<code> ~ page 154 </code>
 
+### Item 21 : 함수에서 객체를 반환해야 할 경우에 참조자를 반환하려고 들지 말자
+*****
 
+<pre>
+**찾아 보기**
+반환 값 최적화 (RVO : return value optimization)
+</pre>
 
+### Item 22 : 데이터 멤버가 선언될 곳은 private 영역임을 명심하자
+*****
 
+- 멤버 변수를 private으로 선언함으로써 캡슐화를 통해 불변속성인 객체를 만들 수 있다.
 
+- 불변속성 : 어떤 객체의 상태가 프로그래머의 의도에 맞게 잘 정의되어 있다고 판단할 수 있는 
+기준을 제공하는 속성
 
+- 어떤 것이 바뀌면 깨질 가능성을 가진 코드가 늘어날 때, 캡슐화의 정도는 그에 반비례한다.
+
+- 캡슐화 관점에서 멤버 변수의 접근 제어자가 private이 아닌 public, protected는 쓸모 없다.
+
+- protected는 public보다 더 많이 보호받고 있는 것이 아니다.
+
+- **인터페이스를 제공하는 입장에서 멤버 변수를 제거하거나 변경했을 때, 접근 제어자가 public이였을 경우를
+생각해보자**
+
+### Item 23 : 멤버 함수보다는 비멤버 비프렌드 함수와 더 가까워지자
+*****
+
+- 캡슐화의 정도는 어떤 데이터를 접근하는 함수의 개수로 알 수 있다.
+
+- 비멤버 비프렌드 함수는 private에 접근할 수 없기 때문에 캡슐화를 높일 수 있다.
+
+- 비멤버 비프렌드 함수를 기능마다 헤더로 나눠 관리하여 컴파일 의존성을 줄일 수 있다.
+
+- **멤버 함수대신 비멤버 비프렌드 함수를 사용항으로써 캡슐화의 정도는 높아지고, 패키징 유연성도 커지며,
+기능적인 확장성도 늘어난다.**
+
+### Item 24 : 타입 변환이 모든 매개변수에 대해 적용되어야 한다면 비멤버 함수를 선언하자
+*****
+
+```cpp
+
+class Rational
+{
+ public:
+	Rational(int numerator = 0, int denominator = 1);
+	
+	int numerator() const;
+	int denominator() const;
+	
+	const Rational operator* (const Rational& rhs);
+}
+
+Rational oneHalf(1, 2);
+
+Rational result = oneHalf * 2;
+
+result = 2 * oneHalf; // 에러 !
+
+const Rational operator* (const Rational& lhs, const Rational& rhs)
+{
+	return Rational(lhs.numerator() * rhs.numerator()
+	, lhs.denominator() * rhs.denominator());
+}
+
+result = 2 * oneHalf; // 성공 !
+```
+
+- int는 클래스와 연관되어 있지 않고, operator[*] 멤버 함수도 없다. 또한 비멤버 버전의 operator[*]도
+없기 때문에 컴파일 에러가 발생한다.
+
+- 멤버 연산자 함수를 호출할 때는 this가 되는 객체에 대해서는 암시적 변환이 되지 않는다.
+비멤버 연산자 함수는 모든 인자에 대해 암시적 타입 변환이 가능하다.
+
+### Item 25 : 예외를 던지지 않는 swap에 대한 지원도 생각해 보자
+*****
+
+<pre>
+**찾아보기**
+1. pimpl
+2. idiom
+3. 쾨니그 탐색, 인자 기반 탐색
+</pre>
+
+- 클래스 템플릿의 부분 특수화는 함수 템플릿에 대해서는 허용하지 않는다.
+
+- std::swap이 클래스에 대해 느리게 동작할 때
+1. swap 멤버 함수를 제공한다.
+단, 이 멤버 swap은 예외를 던지면 안된다.
+2. 멤버 swap을 호출하는 비멤버 swap도 제공한다.
+클래스에 대해 std::swap 특수화도 해둔다.
+3. 사용자 입장에서 swap을 호출할 때는, std::swap에 대한 using 선언을 넣어 준 후에,
+네임스페이스 한정자 없이 swap을 호출한다.
+4. std 템플릿의 완전한 특수화가 가능하지만, std에 어떤 것도 추가하려하면 안된다.
 
 
 
