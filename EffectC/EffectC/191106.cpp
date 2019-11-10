@@ -1,12 +1,11 @@
-#include <iostream>
-#include <chrono>
-#include <numeric>
-
-using namespace std;
-
-
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 ////
+//#include <iostream>
+//#include <chrono>
+//#include <numeric>
+//
+//using namespace std;
+//
 //
 //class CUnCopy
 //{

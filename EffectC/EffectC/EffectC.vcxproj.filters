@@ -18,5 +18,11 @@
     <ClCompile Include="EffectC.cpp">
       <Filter>소스 파일</Filter>
     </ClCompile>
+    <ClCompile Include="191106.cpp">
+      <Filter>소스 파일</Filter>
+    </ClCompile>
+    <ClCompile Include="191107.cpp">
+      <Filter>소스 파일</Filter>
+    </ClCompile>
   </ItemGroup>
 </Project>
