@@ -1,0 +1,10 @@
+### C++ ###
+
+*.vcxproj
+*.filters
+*.user
+
+.vs/
+.EffectC/vs/
+.EffectC/Debug/
+.EffectC/EffectC/Debug/
