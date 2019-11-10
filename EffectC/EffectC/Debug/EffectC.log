@@ -1,4 +1,0 @@
-﻿  EffectC.cpp
-C:\Users\RankerPG\source\repos\EffectC\EffectC\EffectC\EffectC.cpp(85,1): error C2280: 'CDerived::CDerived(void)': 삭제된 함수를 참조하려고 합니다.
-C:\Users\RankerPG\source\repos\EffectC\EffectC\EffectC\EffectC.cpp(57): message : 컴파일러에서 여기에 'CDerived::CDerived'을(를) 생성했습니다.
-C:\Users\RankerPG\source\repos\EffectC\EffectC\EffectC\EffectC.cpp(57,1): message : 'CDerived::CDerived(void)': 기본 클래스이(가) 삭제되거나 액세스할 수 없는 'CBase::CBase(void)' 함수를 호출하므로 함수가 암시적으로 삭제되었습니다.
