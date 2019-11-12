@@ -24,6 +24,12 @@
     <ClCompile Include="191107.cpp">
       <Filter>소스 파일</Filter>
     </ClCompile>
+    <ClCompile Include="191111.cpp">
+      <Filter>소스 파일</Filter>
+    </ClCompile>
+    <ClCompile Include="191112.cpp">
+      <Filter>소스 파일</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="dynamiccast.h">

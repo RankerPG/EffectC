@@ -153,6 +153,8 @@
   <ItemGroup>
     <ClCompile Include="191106.cpp" />
     <ClCompile Include="191107.cpp" />
+    <ClCompile Include="191111.cpp" />
+    <ClCompile Include="191112.cpp" />
     <ClCompile Include="EffectC.cpp" />
   </ItemGroup>
   <ItemGroup>
