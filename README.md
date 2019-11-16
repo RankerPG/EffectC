@@ -822,8 +822,8 @@ https://www.slideshare.net/devcatpublications/ndc2010-unity-build 읽어보기
 재정의하는 것이 필요할 것이다.
 </pre>
 
-# 2019.11.14
-<code> ~ page 358 </code>
+# 2019.11.16
+<code> ~ page 397 </code>
 
 ### Item 50 : new 및 delete를 언제 바꿔야 좋은 소리를 들을지를 파악해 두자
 *****
